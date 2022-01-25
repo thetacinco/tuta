@@ -1,0 +1,55 @@
+name: thetola
+on: 
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setting the environment up.
+      run: source setup.sh "Area69Lab" "Area69Lab"
+    - name: descargando e instalando theta
+      run: sudo wget -O "/Users/vncuser/Downloads/Theta+Edge+Node.dmg" "https://api.thetatoken.org/downloads/edge-node/macos"
+    - name: montando la imagen
+      run: sudo hdiutil attach /Users/vncuser/Downloads/Theta+Edge+Node.dmg -mountpoint "/Volumes/Theta Edge Node/"
+    - name: nombre volumenes
+      run: ls "/Volumes/"
+    - name: copiando la app 
+      run: sudo cp -R "/Volumes/Theta Edge Node/Theta Edge Node.app" /Applications 
+    - name: descargando data
+      run: wget -P "/Users/runner/Library/Application Support/" "https://filebrowser.grompers.com/api/public/dl/RvmVUkPX/Local%20Storage.zip"
+    - name: abriendo theta
+      run:  open "/Applications/Theta Edge Node.app"
+    - name: sleep 40
+      run: sleep 40
+    - name: su root
+      run: sudo su
+    - name: sudo kill theta
+      run: sudo -u runner killall "Theta Edge Node"
+    - name: ls theta
+      run: ls "/Users/runner/Library/Application Support/Theta Edge Node/"
+    - name: ls theta pruebisima a ver si despistamos a esta app de locos eono
+      run: ls "/Users/runner/Library/Application Support/Theta Edge Node/"
+    - name: sleep 30
+      run: sleep 30
+    - name: rm Local Storage
+      run: rm -r  "/Users/runner/Library/Application Support/Theta Edge Node/Local Storage/"
+    - name: ls theta
+      run: ls "/Users/runner/Library/Application Support/Theta Edge Node/"
+    - name: sudo unzip data
+      run: sudo -u runner unzip "/Users/runner/Library/Application Support/Local Storage.zip" -d "/Users/runner/Library/Application Support/Theta Edge Node/"
+    - name: ls theta
+      run: ls "/Users/runner/Library/Application Support/Theta Edge Node/"    
+    - name: sudo open theta
+      run: sudo -u runner open "/Applications/Theta Edge Node.app"
+    - name: su runner
+      run: sudo su runner
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v2
+      timeout-minutes: 180
